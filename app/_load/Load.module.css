@@ -1,0 +1,6 @@
+.load {
+  color: black;
+  display: flex;
+  align-items: start;
+  margin: 20px;
+}
