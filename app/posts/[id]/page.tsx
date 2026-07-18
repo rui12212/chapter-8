@@ -1,4 +1,4 @@
-import  DetailUI  from "./detail_ui";
+import  DetailUI  from "./_components/DetailUI";
 
 type ParamPageProps = {
   params: Promise<{ id: string }>;

@@ -30,7 +30,7 @@ const Home = () => {
         {/* JSXのルールで、.map()の返り値は必ず親一つにまとめないといけない */}
         {posts.map((post: Post) => (
           <Fragment key={post.id}>
-            <Link href={`/${post.id}`} className={classes.tileLink}>
+            <Link href={`posts/${post.id}`} className={classes.tileLink}>
               <div className={classes.alignImageAndTitle}>
                 <li className={classes.imageBox}>
                   <span className={classes.imageBoxText}>800 x 400</span>

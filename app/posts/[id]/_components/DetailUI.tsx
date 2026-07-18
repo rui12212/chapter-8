@@ -1,8 +1,8 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { Load } from "../../_load/page";
-import classes from "./Detail.module.css";
+import { Load } from "../../../_load/page";
+import classes from "../Detail.module.css";
 import { SingleData, Post } from "@/app/_types/type";
 
 type ID = {

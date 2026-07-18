@@ -9,59 +9,25 @@ export default function Contact() {
     email: string;
     content: string;
   };
+
+  type TouchedForm = {
+    name: boolean;
+    email: boolean;
+    content: boolean;
+  };
+
   const initialForm: ContactForm = { name: "", email: "", content: "" };
+  const initialTouched: TouchedForm = {
+    name: false,
+    email: false,
+    content: false,
+  };
 
   const [form, setForm] = useState(initialForm);
-  const [isDisabled, setIsDisabled] = useState(false);
+  const [touched, setTouched] = useState<TouchedForm>(initialTouched);
 
-  const [hasName, setHasName] = useState(true);
-  const [isProperName, setIsProperName] = useState(true);
+  const [isSending, setisSending] = useState(false);
 
-  const [hasEmail, setHasEmail] = useState(true);
-  const [isProperEmail, setIsProperEmail] = useState(true);
-
-  const [hasContent, setHasContent] = useState(true);
-  const [isProperContent, setIsProperContent] = useState(true);
-
-  const validateNameForm = () => {
-    if (!form.name) {
-      setHasName(false);
-      
-    } else if (form.name.length > 30) {
-      setHasName(true);
-      setIsProperName(false);
-    }else
-    {
-      setHasName(true);
-      setIsDisabled(true);
-    }
-  };
-
-  const validateEmailForm = () => {
-    if (!form.email) {
-      setHasEmail(false);
-    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
-      setHasEmail(true);
-      setIsProperEmail(false);
-    }else
-    {
-      setHasName(true);
-      setIsProperEmail(true);
-    }
-  };
-
-  const validateContent = () => {
-    if (!form.content) {
-      setHasContent(false);
-    } else if (form.content.length > 500) {
-      setHasContent(true);
-      setIsProperContent(false);
-    }else
-    {
-      setHasContent(true);
-      setIsProperContent(true);
-    }
-  };
 
   const handleForm = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -70,16 +36,31 @@ export default function Contact() {
       ...form,
       [e.target.name]: e.target.value,
     });
+    setTouched({
+      ...touched,
+      [e.target.name]: true,
+    });
+  };
+
+  const validateForm = () => {
+    if (!form.name || !form.email || !form.content) {
+      return false;
+    } else if (!/\S+@\S+\.\S+/.test(form.email)) {
+      return false;
+    } else if (form.name.length > 30 || form.content.length > 300) {
+      return false;
+    } else return true;
   };
 
   const sendForm = async () => {
-    setIsDisabled(true);
-    validateNameForm();
-    validateEmailForm();
-    validateContent();
+    setisSending(true);
+    
 
-    if (!form.name || !form.email || !form.content) {
-      setIsDisabled(false);
+    if (!validateForm()) {
+      window.alert(
+        "フォームの入力が適切ではありません。訂正してください。",
+      );
+      setisSending(false);
       return;
     }
 
@@ -127,14 +108,16 @@ export default function Contact() {
         }
       }
 
-      const res: ResBody = await req.json()
-      window.alert(`結果:${res.message}: ありがとうございます。返信をお待ちください。`,)
+      const res: ResBody = await req.json();
+      window.alert(
+        `結果:${res.message}: ありがとうございます。返信をお待ちください。`,
+      );
 
-      clearForm()
+      clearForm();
     } catch (error) {
-        window.alert(`結果:${error}送信に失敗しました`);
-    }finally {
-        setIsDisabled(false);
+      window.alert(`結果:${error}送信に失敗しました`);
+    } finally {
+      setisSending(false);
     }
   };
 
@@ -156,11 +139,11 @@ export default function Contact() {
               value={form.name}
               onChange={handleForm}
               className={classes.nameForm}
-              disabled={isDisabled}
+              disabled={isSending}
             />
-            {!hasName ? (
+            {touched.name == true && !form.name ? (
               <span className={classes.error}>名前の記入は必須です</span>
-            ) : !isProperName ? (
+            ) : touched.name == true && form.name.length > 30 ? (
               <span className={classes.error}>名前は30文字以内です</span>
             ) : null}
           </div>
@@ -175,13 +158,13 @@ export default function Contact() {
               value={form.email}
               onChange={handleForm}
               className={classes.emailForm}
-              disabled={isDisabled}
+              disabled={isSending}
             />
-            {!hasEmail ? (
+            {touched.email == true && !form.email ? (
               <span className={classes.error}>
                 メールアドレスの記入は必須です
               </span>
-            ) : !isProperEmail ? (
+            ) : touched.email == true && !/\S+@\S+\.\S+/.test(form.email) ? (
               <span className={classes.error}>
                 メールアドレスの形式が正しくありません
               </span>
@@ -198,24 +181,26 @@ export default function Contact() {
               value={form.content}
               onChange={handleForm}
               className={classes.contentForm}
-              disabled={isDisabled}
+              disabled={isSending}
             ></textarea>
-            {hasContent ? null : (
+            {touched.content == true && !form.content ? (
               <span className={classes.error}>本文の記入は必須です</span>
-            )}
+            ) : touched.content == true && form.content.length > 300 ? (
+              <span className={classes.error}>本文は300文字以内です</span>
+            ) : null}
           </div>
         </div>
         <div className={classes.buttonAlign}>
           <button
             className={classes.sendButton}
-            disabled={isDisabled}
+            disabled={isSending}
             onClick={sendForm}
           >
-            {isDisabled ? "送信中..." : "送信"}
+            {isSending ? "送信中..." : "送信"}
           </button>
           <button
             className={classes.clearButton}
-            disabled={isDisabled}
+            disabled={isSending}
             onClick={clearForm}
           >
             クリア
