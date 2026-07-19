@@ -4,22 +4,28 @@ import { useEffect, useState } from "react";
 import { Load } from "../../../_load/page";
 import classes from "../Detail.module.css";
 import { SingleData, Post } from "@/app/_types/type";
+import { MicroCmsPost } from "@/app/_types/MicroCmsPost";
+import Image from "next/image";
 
 type ID = {
-  id: string
-}
+  id: string;
+};
 
-const DetailUI = ({id}: ID) => {
+const DetailUI = ({ id }: ID) => {
   const [loadEnd, setLoadEnd] = useState(false);
-  const [data, setData] = useState<Post>();
+  const [data, setData] = useState<MicroCmsPost>();
 
   useEffect(() => {
     const getDetailPost = async () => {
       const req: Response = await fetch(
-        `https://1hmfpsvto6.execute-api.ap-northeast-1.amazonaws.com/dev/posts/${id}`,
+        `https://rmf6mueo2k.microcms.io/api/v1/posts/${id}`,
+        {
+          headers: {
+            "X-MICROCMS-API-KEY": process.env.NEXT_PUBLIC_MICROCMS_API_KEY as string,
+          },
+        },
       );
-      const post_json: SingleData = await req.json();
-      const post: Post = post_json.post;
+      const post: MicroCmsPost = await req.json();
       setLoadEnd(!loadEnd);
       setData(post);
     };
@@ -31,7 +37,7 @@ const DetailUI = ({id}: ID) => {
     return (
       <>
         <p className={classes.errorText}>記事が見つかりませんでした</p>
-        <Link href="/home" className={classes.goBackHome}>
+        <Link href="/" className={classes.goBackHome}>
           記事一覧へ戻る
         </Link>
       </>
@@ -39,7 +45,13 @@ const DetailUI = ({id}: ID) => {
   return (
     <div className={classes.bodyPreset}>
       <span className={classes.imageBox}>
-        <span className={classes.imageBoxText}>800 x 400</span>
+        <Image
+          height={116}
+          width={157}
+          src={data.thumbnail.url}
+          alt={`${data.thumbnail.url}の画像`}
+          className={classes.imageBoxText}
+        />
       </span>
       <div className={classes.postTextArea}>
         <div className={classes.postHeader}>
@@ -53,7 +65,7 @@ const DetailUI = ({id}: ID) => {
           <span>
             {data.categories.map((category, id) => (
               <span key={id} className={classes.categoryTag}>
-                {category}
+                {category.name}
               </span>
             ))}
           </span>
@@ -63,7 +75,7 @@ const DetailUI = ({id}: ID) => {
           className={classes.postContent}
           dangerouslySetInnerHTML={{ __html: data.content }}
         />
-        <Link href="/home" className={classes.goBackHome}>
+        <Link href="/" className={classes.goBackHome}>
           記事一覧へ戻る
         </Link>
       </div>

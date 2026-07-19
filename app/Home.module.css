@@ -89,6 +89,8 @@
 .imageBoxText {
   white-space: nowrap;
   font-size: 20cqw;
+  height: auto;
+  width: auto;
 }
 
 @media (max-width: 1024px) {
