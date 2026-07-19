@@ -4,12 +4,12 @@ import Link from "next/link";
 import { MultiData, Posts, Post } from "./_types/type";
 import { Load } from "./_load/page";
 import classes from "./Home.module.css";
-import {MicroCmsPost ,MicroCmsPosts } from "./_types/MicroCmsPost";
+import {MicroCmsPost} from "./_types/MicroCmsPost";
 import Image from "next/image";
 
 const Home = () => {
   const [loadEnd, setLoadEnd] = useState(false);
-  const [posts, setPosts] = useState<MicroCmsPosts>([]);
+  const [posts, setPosts] = useState<MicroCmsPost[]>([]);
   
   useEffect(() => {
     const getPost = async () => {
@@ -32,7 +32,6 @@ const Home = () => {
     <div className={classes.bodyPreset}>
       <label className={classes.homeTitle}>記事一覧</label>
       <ul className="post">
-        {/* JSXのルールで、.map()の返り値は必ず親一つにまとめないといけない */}
         {posts.map((post: MicroCmsPost) => (
           <Fragment key={post.id}>
             <Link href={`posts/${post.id}`} className={classes.tileLink}>
