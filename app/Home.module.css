@@ -1,0 +1,120 @@
+.app {
+  display: flex;
+  flex-direction: column;
+}
+
+.bodyPreset {
+  width: 80%;
+  margin: 0 auto;
+}
+
+.homeTitle {
+  font-weight: bold;
+  font-size: larger;
+  color: black;
+  display: flex;
+  margin-top: clamp(20px, 3vw, 25px);
+}
+
+.post {
+  list-style: none;
+  padding-left: 0;
+}
+
+.postBorderBottom {
+  margin: clamp(12px, 3vw, 15px);
+  border-bottom: 0.5px solid rgb(230, 230, 230);
+  list-style: none;
+}
+
+.alignImageAndTitle {
+  display: flex;
+  align-items: flex-start;
+}
+
+.imageBox {
+  width: clamp(200px, 3vw, 250px);
+  height: clamp(140px, 3vw, 150px);
+  background-color: rgb(202, 201, 201);
+  font-size: clamp(35px, 3vw, 40px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(135, 135, 135);
+  flex-shrink: 0;
+  container-type: inline-size;
+}
+
+.postTextArea {
+  /* width: 50%; */
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  margin-left: 10px;
+  gap: 10px;
+  width: 600px;
+}
+
+.categoryTag {
+  background-color: rgb(213, 213, 213);
+  border-radius: 50px;
+  padding: 4px 12px;
+  font-size: 14px;
+  gap: 20px;
+}
+
+.postHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+  list-style: none;
+}
+
+.postTitle {
+  font-weight: bolder;
+  color: black;
+  font-size: larger;
+}
+
+.postContent {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  min-height: 0;
+  text-align: left;
+}
+
+.imageBoxText {
+  white-space: nowrap;
+  font-size: 20cqw;
+}
+
+@media (max-width: 1024px) {
+  .postTextArea {
+    width: 400px;
+  }
+}
+
+@media (max-width: 480px) {
+  .bodyPreset {
+    width: 90%;
+  }
+  .alignImageAndTitle {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .postTextArea {
+    width: 400px;
+  }
+  .imageBox {
+    width: 100%;
+  }
+}
+
+.tileLink {
+  text-decoration: none;
+  color: inherit;
+}
